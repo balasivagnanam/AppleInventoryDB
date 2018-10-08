@@ -1,0 +1,23 @@
+{
+  "name": "synergo-shop",
+  "version": "1.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dilraj Singh",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.0",
+    "async-each": "^1.0.1",
+    "ejs": "^2.5.7",
+    "express": "^4.16.2",
+    "magento-node-api": "^1.0.2",
+    "mongoose": "^5.0.7",
+    "node-cron": "^1.2.1",
+    "nodemailer": "^4.6.2",
+    "nodemon": "^1.15.1",
+    "request": "^2.83.0"
+  }
+}

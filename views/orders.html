@@ -1,0 +1,15 @@
+<div class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Order Details</h4>
+            </div>
+            <div class="modal-body" ng-transclude>
+                <div class="row" ng-repeat="order in orders">
+                    {{order.invoice.order_id}} {{order.invoice.order_currency_code}}{{order.invoice.base_grand_total}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,133 @@
+<div class="container">
+    <div class="col-md-12" ng-show="latestProducts">
+        <div class="col-md-12 list-heading">
+            <a data-toggle="collapse" class="btn collapsed list-heading" data-target="#new-products">
+                <span class="list-heading">Recently Added Products</span>
+                <i class="fas fa-chevron-up pull-right" aria-hidden="true"></i>
+            </a>
+        </div>
+        <div id="new-products" class="collapse">
+            <div class="row">
+                <div class="col-md-12">
+                    <button class="btn btn-warning" ng-click="clearRecentProducts()">Accept All Without Quantity</button>
+                </div>
+                <hr>
+            </div>
+            <div class="clearfix"></div>
+            <div class="row" ng-repeat="product in latestProducts">
+                <div class="product-image">
+                    <img ng-show="(product.media[0].url)" ng-src="{{product.media[0].url}}" />
+                    <img ng-show="(!product.media[0].url)" ng-src="http://test.synergoshop.com/media/catalog/product/cache/1/small_image/540x720/9df78eab33525d08d6e5fb8d27136e95/images/catalog/product/placeholder/small_image.jpg"
+                    />
+                </div>
+                <div class="quantity-update">
+                    <input type="number" ng-model="product.qty" placeholder="0">
+                    <button class="btn btn-primary" ng-click="updateProductQty(product)">Add</button>
+                </div>
+                <div class="product-details">
+                    <div class="product-header">
+                        <span class="sku-label">{{ product.sku }} </span>
+                        <span class="product-name">{{ product.name }}</span>
+                        <span ng-show="((product.qty == null) || (product.qty == undefined) || product.qty &lt;= alert)">
+                            <i class="fas fa-info-circle"></i>
+                        </span>
+                    </div>
+                    <div class="product-quantity">
+                        <label>Quantity :</label>
+                        <span> {{product.qty - calQty(product.orders) | number}}</span>
+                        <label>Price : </label>
+                        <span> {{product.currency || "S$" }}{{product.price | number:2 }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="col-md-12 list-heading">Listed Products</div>
+        <div class="col-md-12 mtb list-filters">
+            <div class="col-md-4">
+                <form>
+                    <div class="width-full input-group">
+                        <input class="form-control" ng-model="search" placeholder="Search with sku,name">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit" ng-click="getDefaultProducts()">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="clearfix"></div>
+            </div>
+            <div class="col-md-8">
+                <div class="width-full sort-by">
+                    <select ng-model="filter" ng-change="filterAction()" class="form-control">
+                        <option value="all" selected>--SORT BY--</option>
+                        <option value="sku">SKU</option>
+                        <option value="price">Price</option>
+                        <option value="product_name">Name</option>
+                    </select>
+                    <button class="btn btn-default">
+                        <i ng-show="(sortValue == 'asc')" ng-click="sortAction()" class="fas fa-arrow-up"></i>
+                        <i ng-click="sortAction()" ng-show="(sortValue == 'desc')" class="fas fa-arrow-down"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-12 pagination-display">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" ng-show="((page-1) > 0)" ng-click="getProducts(page-1,itemperpage,filter,search,sortValue)"> &lt;&lt; Prev </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" ng-hide="(itemperpage == 0)" ng-click="getProducts(page+1,itemperpage,filter,search,sortValue)"> Next &gt;&gt; </a>
+                    </li>
+                </ul>
+                <div class="display-rows">
+                    <span ng-click="getProducts(1,10,filter,search,sortValue)">10</span>/
+                    <span ng-click="getProducts(1,20,filter,search,sortValue)">20</span>/
+                    <span ng-click="getProducts(1,30,filter,search,sortValue)">30</span>/
+                    <span ng-click="getProducts(1,40,filter,search,sortValue)">40</span>/
+                    <span ng-click="getProducts(1,0,filter,search,sortValue)">All</span>
+                    <span> (Showing {{itemperpage || "All"}} Items.) </span>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <hr>
+        <div class="row product-row" ng-repeat="product in products">
+            <div class="product-image">
+                <img ng-show="(product.media[0].url)" ng-src="{{product.media[0].url}}" />
+                <img ng-show="(!product.media[0].url)" ng-src="http://test.synergoshop.com/media/catalog/product/cache/1/small_image/540x720/9df78eab33525d08d6e5fb8d27136e95/images/catalog/product/placeholder/small_image.jpg"
+                />
+            </div>
+            <div class="quantity-update">
+                <input type="number" ng-model="product.qty" placeholder="0">
+                <button class="btn btn-primary" ng-click="updateProductQty(product)">Add</button>
+            </div>
+            <div class="product-details">
+                <div class="product-header">
+                    <span class="sku-label">{{ product.sku }} </span>
+                    <span class="product-name">{{ product.name }}</span>
+                    <span ng-show="((product.qty == null) || (product.qty == undefined) || product.qty &lt;= alert)">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                </div>
+                <div class="product-quantity">
+                    <label>Quantity :</label>
+                    <span> {{product.qty - calQty(product.orders) | number}}</span>
+                    <label>Price : </label>
+                    <span> {{product.currency || "S$" }}{{product.price | number:2 }}</span>
+                    <button ng-show="product.orders" ng-click="toggleModal(product.orders)" class="btn btn-default btn-sm">{{product.orders.length}} Orders</button>
+                    <!-- <button class="btn" ng-click="open()">Open Modal</button> -->
+                </div>
+            </div>
+        </div>
+        <modal visible="showModal">
+        </modal>
+    </div>
+</div>
+
+<div ng-show="loading" class="process-request">
+    <div class="frame">
+        <img src="images/source.gif" />
+    </div>
+</div>
