@@ -36,6 +36,9 @@ app.use('/product',api);
 app.use('*',index);
 // define the middleware for routing
 
-app.listen(port,function(){
-    console.log('Server Started At '+port);
-})
+//app.listen(port,function(){
+//    console.log('Server Started At '+port);
+//})
+
+app
+.listen(process.env.PORT || 4502)
